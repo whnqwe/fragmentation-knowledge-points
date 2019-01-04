@@ -1,0 +1,4 @@
+# @ConfigurationProperties 注解
+
+
+
