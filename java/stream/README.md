@@ -145,6 +145,12 @@ public class Arrays {
 
 > accumulator 表示操作两个值得到结果的函数
 
+> identity 是这样一个值，对于涉及到identity 与流中任意元素的累计操作，得到的结果就是元素本身。
+>
+> > 例如：累加操作，identity是0，因为0+x 是x 
+> >
+> > 例如:  乘法操作，identity是1，因为1 * x 是 x 
+
 ```java
 public interface Stream<T> extends BaseStream<T, Stream<T>> {
     
@@ -160,13 +166,37 @@ public interface Stream<T> extends BaseStream<T, Stream<T>> {
 }
 ```
 
+> BiFunction定义了如下的抽象方法
+
+```java
+@FunctionalInterface
+public interface BiFunction<T, U, R> {
+     R apply(T val, U val2);
+}
+```
+
+> 其中，R指定了结果的类型，T 是第一个操作数的类型，U 是第二个操作数的类型，apply() 对其两个操作数应用于一个函数，并返回结果，
+
+>  BinaryOperator扩展了BiFunction函数式接口， 为所有的类型参数指定了相同的类型，因此对于BinaryOperator来说，apply()如下
+
+```java
+@FunctionalInterface
+public interface BinaryOperator<T> extends BiFunction<T,T,T> {
+    T apply(T val, T val2);
+}
+```
+
+> 在reduce中，val 将包含前一个结果，val2包含下一个元元素。
+
+> accumulator操作必须满足以下的三个条件
+>
+> - 无状态
+> - 不干预
+> - 结合性
 
 
-####  返回Optional
 
 
-
-#### 返回流中元素的类型
 
 
 
