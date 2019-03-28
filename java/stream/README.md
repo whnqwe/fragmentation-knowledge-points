@@ -194,6 +194,12 @@ public interface BinaryOperator<T> extends BiFunction<T,T,T> {
 > - 不干预
 > - 结合性
 
+```java
+      myList.stream().reduce(1,(a,b)->{
+            if(b%2==0) return a*b;else return a;
+        });
+```
+
 
 
 
