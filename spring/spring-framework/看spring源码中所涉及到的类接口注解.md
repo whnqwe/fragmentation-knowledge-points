@@ -68,15 +68,7 @@
 
 #### @Controller
 
-#### @Value
-
 #### @Autowired
-
-#### @Resource
-
-#### @Qualifier
-
-#### @Scope
 
 #### @RequestMapping
 
