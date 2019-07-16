@@ -2,6 +2,8 @@
 
 ![](image/beanzhouqi.png)
 
+
+
 #### 实例化
 
 > Spring对bean进行实例化
@@ -99,4 +101,159 @@ public interface DisposableBean {
    void destroy() throws Exception;
 }
 ```
+
+
+
+# 代码分析
+
+#### AbstractAutowireCapableBeanFactory
+
+##### createBean
+
+```java
+	@Override
+	protected Object createBean(final String beanName, final RootBeanDefinition mbd, final Object[] args)
+			throws BeanCreationException {
+    ......
+
+		Object beanInstance = doCreateBean(beanName, mbd, args);
+	......
+		return beanInstance;
+	}
+```
+
+
+
+##### doCreateBean
+
+```java
+	protected Object doCreateBean(final String beanName, final RootBeanDefinition mbd, final Object[] args) {
+    ......
+     	Object exposedObject = bean;
+		try {
+			populateBean(beanName, mbd, instanceWrapper);
+			if (exposedObject != null) {
+				exposedObject = initializeBean(beanName, exposedObject, mbd);
+			}
+		}
+    ......
+    
+    }
+```
+
+##### initializeBean
+
+```java
+	protected Object initializeBean(final String beanName, final Object bean, RootBeanDefinition mbd) {
+		if (System.getSecurityManager() != null) {
+			AccessController.doPrivileged(new PrivilegedAction<Object>() {
+				public Object run() {
+					invokeAwareMethods(beanName, bean);
+					return null;
+				}
+			}, getAccessControlContext());
+		}
+		else {
+			invokeAwareMethods(beanName, bean);
+		}
+
+		Object wrappedBean = bean;
+		if (mbd == null || !mbd.isSynthetic()) {
+			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
+		}
+
+		try {
+			invokeInitMethods(beanName, wrappedBean, mbd);
+		}
+		catch (Throwable ex) {
+			throw new BeanCreationException(
+					(mbd != null ? mbd.getResourceDescription() : null),
+					beanName, "Invocation of init method failed", ex);
+		}
+
+		if (mbd == null || !mbd.isSynthetic()) {
+			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
+		}
+		return wrappedBean;
+	}
+
+```
+
+
+
+##### invokeAwareMethods
+
+    ###### BeanNameAware  
+
+###### BeanClassLoaderAware  
+
+###### BeanFactoryAware
+
+```java
+	private void invokeAwareMethods(final String beanName, final Object bean) {
+		if (bean instanceof Aware) {
+			if (bean instanceof BeanNameAware) {
+				((BeanNameAware) bean).setBeanName(beanName);
+			}
+			if (bean instanceof BeanClassLoaderAware) {
+				((BeanClassLoaderAware) bean).setBeanClassLoader(getBeanClassLoader());
+			}
+			if (bean instanceof BeanFactoryAware) {
+				((BeanFactoryAware) bean).setBeanFactory(AbstractAutowireCapableBeanFactory.this);
+			}
+		}
+	}
+```
+
+##### applyBeanPostProcessorsBeforeInitialization
+
+````java
+	public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName)
+			throws BeansException {
+
+		Object result = existingBean;
+		for (BeanPostProcessor beanProcessor : getBeanPostProcessors()) {
+			result = beanProcessor.postProcessBeforeInitialization(result, beanName);
+			if (result == null) {
+				return result;
+			}
+		}
+		return result;
+	}
+````
+
+
+
+##### invokeInitMethods
+
+```java
+	protected void invokeInitMethods(String beanName, final Object bean, RootBeanDefinition mbd)
+			throws Throwable {
+......
+		((InitializingBean) bean).afterPropertiesSet();
+......
+
+......
+
+		invokeCustomInitMethod(beanName, bean, mbd);
+......
+```
+
+##### applyBeanPostProcessorsAfterInitialization
+
+````java
+
+	public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
+			throws BeansException {
+
+		Object result = existingBean;
+		for (BeanPostProcessor beanProcessor : getBeanPostProcessors()) {
+			result = beanProcessor.postProcessAfterInitialization(result, beanName);
+			if (result == null) {
+				return result;
+			}
+		}
+		return result;
+	}
+````
 
