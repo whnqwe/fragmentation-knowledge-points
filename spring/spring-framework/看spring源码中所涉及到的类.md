@@ -60,6 +60,12 @@
 
 > Bean中有@value  @autowire注解要封装成的类
 
+#### HandlerMethodArgumentResolver
+
+> spring mvc 参数绑定的基类
+
+
+
 
 
 
