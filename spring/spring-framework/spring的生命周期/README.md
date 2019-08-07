@@ -183,7 +183,7 @@ public interface DisposableBean {
 
 ##### invokeAwareMethods
 
-    ###### BeanNameAware  
+###### BeanNameAware  
 
 ###### BeanClassLoaderAware  
 

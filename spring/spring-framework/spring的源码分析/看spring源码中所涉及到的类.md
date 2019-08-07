@@ -10,6 +10,24 @@
 
 > 获取Bean的相关类
 
+#### ContextRefreshedEvent
+
+> 容器刷新事件
+
+####  ContextClosedEvent
+
+> 容器关闭事件
+
+####  ContextStartedEvent
+
+> 容器开始事件
+
+#### ContextStoppedEvent
+
+> 容器停止时间
+
+
+
 ### 接口
 
 
@@ -66,9 +84,27 @@
 
 
 
+#### BeanFactoryPostProcessor
+
+> beanFactory的后置处理器
+
+> 所有的bean定义已经保存加载到beanFactory，但是bean的实例还未创建
+
+#### BeanDefinitionRegistryPostProcessor
+
+> 优先于BeanFactoryPostProcessor执行；
+>
+> 利用BeanDefinitionRegistryPostProcessor给容器中再额外添加一些组件；
 
 
 
+#### ApplicationListener
+
+> 监听某个事件（ApplicationEvent及其子类）
+
+#### ApplicationEventMulticaster
+
+> 获取事件的多播器
 
 # 注解
 
