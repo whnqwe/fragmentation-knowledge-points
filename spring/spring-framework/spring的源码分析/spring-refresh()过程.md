@@ -84,6 +84,7 @@ public void refresh() throws BeansException, IllegalStateException {
 ```java
 	protected void prepareRefresh() {
 		this.startupDate = System.currentTimeMillis();
+        //设置应用开启的时间还有active标志
 		this.closed.set(false);
 		this.active.set(true);
 
@@ -143,12 +144,17 @@ protected final void refreshBeanFactory() throws IllegalStateException {
 ```java
 protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		// 设置BeanFactory的类加载器
+    ////设置类加载器：存在则直接设置/不存在则新建一个默认类加载器
 		beanFactory.setBeanClassLoader(getClassLoader());
         //支持表达式解析器
+    //设置EL表达式解析器（Bean初始化完成后填充属性时会用到）
 		beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
+    
+    //设置属性注册解析器PropertyEditor
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
 		// 添加部分BeanPostProcessor【ApplicationContextAwareProcessor】
+    //// 将当前的ApplicationContext对象交给ApplicationContextAwareProcessor类来处理，从而在Aware接口实现类中的注入applicationContext
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
         
          //设置忽略的自动装配的接口EnvironmentAware、EmbeddedValueResolverAware....
