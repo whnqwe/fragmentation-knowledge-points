@@ -241,7 +241,7 @@ public class StopWatchHandlerInterceptor implements HandlerInterceptor {
 
 ## 实现WebRequestInterceptor 接口
 
-> > > > > WebRequestInterceptor中也定义了三个方法，我们也是通过这三个方法来实现拦截的。这三个方法都传递了同一个参数WebRequest，那么这个WebRequest是什么呢？这个WebRequest是Spring定义的一个接口，它里面的方法定义都基本跟HttpServletRequest 一样，在WebRequestInterceptor 中对WebRequest 进行的所有操作都将同步到HttpServletRequest 中，然后在当前请求中一直传递。
+> WebRequestInterceptor中也定义了三个方法，我们也是通过这三个方法来实现拦截的。这三个方法都传递了同一个参数WebRequest，那么这个WebRequest是什么呢？这个WebRequest是Spring定义的一个接口，它里面的方法定义都基本跟HttpServletRequest 一样，在WebRequestInterceptor 中对WebRequest 进行的所有操作都将同步到HttpServletRequest 中，然后在当前请求中一直传递。
 
 #### preHandle
 
